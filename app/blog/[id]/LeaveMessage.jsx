@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,27 +11,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { LeaveMessageSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 
-const onSubmit = () => {}
+const onSubmit = () => {};
 
 const LeaveMessage = () => {
-  const form = useForm({
-    resolver: zodResolver(LeaveMessageSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      message: ""
-    }
-  });
-
   return (
     <Form className="my-4" {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="font-light">
+      <form onSubmit={() => {}} className="font-light">
         <div className="grid md:grid-cols-2 gap-2 md:gap-6 mb-4 md:mb-6">
           <FormField
-            control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
@@ -43,7 +32,6 @@ const LeaveMessage = () => {
             )}
           />
           <FormField
-            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
@@ -56,7 +44,6 @@ const LeaveMessage = () => {
           />
         </div>
         <FormField
-          control={form.control}
           name="message"
           render={({ field }) => (
             <FormItem>
