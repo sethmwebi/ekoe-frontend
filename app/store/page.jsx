@@ -12,7 +12,11 @@ import {
 
 import { useGetAllProductsQuery } from "@/lib/features/products/productSlice";
 import { ChevronDownIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setSortOption,
+  setPriceRange,
+} from "@/lib/features/filters/filterSlice";
 
 const SORT_OPTIONS = [
   { name: "None", value: "none" },
@@ -32,34 +36,21 @@ const PRICE_FILTERS = {
 export const dynamic = "force-dynamic";
 
 const Store = () => {
-  const [filters, setFilters] = useState({
-    priceRange: { lowerBound: 2500, upperBound: 7500 },
-    selectedCategories: [],
-    taggedItems: [],
-    sortOption: "none",
-  });
+  const dispatch = useDispatch();
+
+  // Get the global filters state
+  const filters = useSelector((state) => state.filters);
 
   const { data: products, error, isLoading } = useGetAllProductsQuery(filters);
 
-  useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      priceRange: { lowerBound: 0, upperBound: 100000 },
-    }));
-  }, []);
-
   const handleSortChange = (sortOption) => {
-    setFilters((prev) => ({
-      ...prev,
-      sortOption,
-    }));
+    dispatch(setSortOption(sortOption));
   };
 
-  const handPriceChange = (priceRange) => {
-    setFilters((prev) => ({
-      ...prev,
-      priceRange: { lowerBound: priceRange[0], upperBound: priceRange[1] },
-    }));
+  const handlePriceChange = (priceRange) => {
+    dispatch(
+      setPriceRange({ lowerBound: priceRange[0], upperBound: priceRange[1] })
+    );
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -68,7 +59,7 @@ const Store = () => {
   return (
     <div className="mt-[48px] z-20 container grid grid-cols-12">
       <div className="hidden  col-span-12 ml-4 md:ml-0 md:grid md:col-span-2 order-3 md:order-first">
-        <StoreSidebar filters={filters} setFilters={setFilters} />
+        <StoreSidebar />
       </div>
       <div className="col-span-12 md:col-span-10 gap-8 md:gap-3 xl:ml-auto grid grid-cols-1 my-8 lg:grid-cols-2 xl:grid-cols-3">
         <div className="col-span-full flex justify-between md:justify-end">
@@ -85,7 +76,7 @@ const Store = () => {
               <DropdownMenuContent align="end" className="bg-accent">
                 {PRICE_FILTERS.options.map((option, index) => (
                   <DropdownMenuItem
-                    onClick={() => handPriceChange(option.value)}
+                    onClick={() => handlePriceChange(option.value)}
                     className="w-full hover:bg-red-500 cursor-pointer"
                     key={`price-filter-${index}`}
                   >
