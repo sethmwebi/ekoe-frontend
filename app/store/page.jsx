@@ -110,7 +110,7 @@ const Store = () => {
                     className="w-full hover:bg-red-500 cursor-pointer"
                     key={`sort-option-${index}`}
                   >
-                    <Dot />
+                    {filters.sortOption === option.value && <Dot />}
                     &nbsp;
                     {option.name}
                   </DropdownMenuItem>
